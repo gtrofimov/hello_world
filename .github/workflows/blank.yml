@@ -13,6 +13,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  SOAVIRT_URL: "http://18.236.220.213:9080"
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -27,10 +30,25 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: $PWD
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+              echo -e "\nUploading Files.\n"
+              cd virt
+              for file in *
+              do
+                echo ${file}
+                curl -iv --raw \
+                -u admin:admin \
+                -H "accept: application/json" \
+                -H "Content-Type: multipart/form-data" \
+                -F "file=@${file}" \
+                "$SOAVIRT_URL/soavirt/api/v6/files/upload?id=%2FVirtualAssets%2F${file}&deploy=false&replace=true" \
+                -o upload.log
+                echo -e "\nDebug.\n"
+                cat upload.log
+                sleep 5s
+                echo -e "\nDone."
+              done
