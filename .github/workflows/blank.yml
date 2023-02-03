@@ -1,0 +1,100 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  SOAVIRT_URL: "http://localhost:9080"
+  USER: "admin"
+  PASS: "admin"
+  LS_HOST: ${{ secrets.LS_HOST }}
+  LS_PORT: ${{ secrets.LS_PORT }}
+  LS_USER: ${{ secrets.LS_USER }}
+  LS_PASS: ${{ secrets.LS_PASS }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Echo workspace
+        run: |
+          echo "$PWD"
+      
+      # Deploy and License Docker SOAVirt Server
+      - name: Deploy and License Docker SOAVirt Server
+        run: |
+            # Set up
+            echo -e "\nSetting Up.\n"
+            mkdir tmp
+            echo $PWD
+            ls -R $PWD
+            # Deloy Docker Virt Server
+            echo -e "\nDeploying Parasoft SOAVirt Server.\n"
+            docker run -d \
+            -p 9080:9080 \
+            -e ACCEPT_EULA=true \
+            --name soavirt-server parasoft/soavirt-server
+
+            # Wait for Server to stand up
+            sleep 15s
+
+            # Apply License
+            echo -e "\nApplying License.\n"
+            curl -X PUT "$SOAVIRT_URL/soavirt/api/v6/preferences/config" \
+            -u $USER:$PASS \
+            -H "accept: application/log" \
+            -H "Content-Type: application/log" \
+            -d "{\"license\":{\"licenseServer\":{\"host\":\"$LS_HOST\",\"port\":$LS_PORT,\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"$LS_USER\",\"password\":\"$LS_PASS\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
+            
+            # Healthcheck Parasoft SOAVirt Server
+            echo -e "\nPing SOAVirt.\n"
+            curl -u $USER:$$PASS "$SOAVIRT_URL/soavirt/api/v6/status" -o tmp/server-hc.log
+            ls -R
+            cat tmp/server-hc.log
+
+      # Runs a set of commands using the runners shell
+      - name: Uplaod to Parasoft Server
+        run: |
+              echo -e "\nUploading Files.\n"
+              cd virt
+              for file in *
+              do
+                echo ${file}
+                curl -iv --raw \
+                -u "$USER:$PASS" \
+                -H "accept: application/json" \
+                -H "Content-Type: multipart/form-data" \
+                -F "file=@${file}" \
+                "$SOAVIRT_URL/soavirt/api/v6/files/upload?id=%2FVirtualAssets%2F${file}&deploy=false&replace=true" \
+                -o upload.log
+                echo -e "\nDebug.\n"
+                cat upload.log
+                sleep 5s
+                echo -e "\nDone."
+              done
+      # Runs a set of commands using the runners shell
+      - name: Test the Asset
+        run: |
+              echo -e "\nTesting Virtual Assets.\n"
+              curl -iv --raw "$SOAVIRT_URL/HelloWorld" -o test.log
+              cat test.log
+              echo -e "\nDone."
