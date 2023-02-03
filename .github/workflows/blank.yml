@@ -62,4 +62,3 @@ jobs:
               curl -iv --raw "$SOAVIRT_URL/HelloWorld" -o test.log
               cat test.log
               echo -e "\nDone."
-              done
