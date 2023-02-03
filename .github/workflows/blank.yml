@@ -63,7 +63,7 @@ jobs:
             -u $USER:$PASS \
             -H "accept: application/log" \
             -H "Content-Type: application/log" \
-            -d "{\"license\":{\"licenseServer\":{\"host\":\"$LS_URL\",\"port\":$LS_PORT,\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"$LS_USER\",\"password\":\"$LS_PASS\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
+            -d "{\"license\":{\"licenseServer\":{\"host\":\"$LS_HOST\",\"port\":$LS_PORT,\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"$LS_USER\",\"password\":\"$LS_PASS\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
             
             # Healthcheck Parasoft SOAVirt Server
             echo -e "\nPing SOAVirt.\n"
