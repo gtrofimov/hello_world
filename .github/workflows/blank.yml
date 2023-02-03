@@ -14,9 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  SOAVIRT_URL: "http://18.236.220.213:9080"
-  USER: "demo"
-  PASS: "demo-user"
+  SOAVIRT_URL: "http://localhost:9080"
+  USER: "admin"
+  PASS: "admin"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,7 +33,39 @@ jobs:
       # Runs a single command using the runners shell
       - name: Echo workspace
         run: |
-          echo "$PWD","$SOAVIRT_URL", "$USER","$PASS"
+          echo "$PWD"
+      
+      # Deploy and License Docker SOAVirt Server
+      - name: Deploy and License Docker SOAVirt Server
+        run: |
+            # Set up
+            echo -e "\nSetting Up.\n"
+            mkdir tmp
+            echo $PWD
+            ls -R $PWD
+            # Deloy Docker Virt Server
+            echo -e "\nDeploying Parasoft SOAVirt Server.\n"
+            docker run -d \
+            -p 9080:9080 \
+            -e ACCEPT_EULA=true \
+            --name soavirt-server parasoft/soavirt-server
+
+            # Wait for Server to stand up
+            sleep 15s
+
+            # Apply License
+            echo -e "\nApplying License.\n"
+            curl -X PUT "$SOAVIRT_URL/soavirt/api/v6/preferences/config" \
+            -u $USER:$PASS \
+            -H "accept: application/log" \
+            -H "Content-Type: application/log" \
+            -d "{\"license\":{\"licenseServer\":{\"host\":\"$LS_URL\",\"port\":$LS_PORT),\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"$LS_USER\",\"password\":\"$LS_PASS\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
+            
+            # Healthcheck Parasoft SOAVirt Server
+            echo -e "\nPing SOAVirt.\n"
+            curl -u $USER:$$PASS "$SOAVIRT_URL/soavirt/api/v6/status" -o tmp/server-hc.log
+            ls -R
+            cat tmp/server-hc.log
 
       # Runs a set of commands using the runners shell
       - name: Uplaod to Parasoft Server
