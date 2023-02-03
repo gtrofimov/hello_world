@@ -15,8 +15,8 @@ on:
 
 env:
   SOAVIRT_URL: "http://18.236.220.213:9080"
-  USER: demo
-  PASS: demo-vm
+  USER: "demo"
+  PASS: "demo-vm"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,7 +43,7 @@ jobs:
               do
                 echo ${file}
                 curl -iv --raw \
-                -u $USER:$PASS \
+                -u "$USER:$PASS" \
                 -H "accept: application/json" \
                 -H "Content-Type: multipart/form-data" \
                 -F "file=@${file}" \
@@ -58,7 +58,7 @@ jobs:
       - name: Test the Asset
         run: |
               echo -e "\nTesting Virtual Assets.\n"
-              curl -iv --raw $SOAVIRT_URL/HelloWorld -o test.log
+              curl -iv --raw "$SOAVIRT_URL/HelloWorld" -o test.log
               cat test.log
               echo -e "\nDone."
               done
