@@ -17,6 +17,10 @@ env:
   SOAVIRT_URL: "http://localhost:9080"
   USER: "admin"
   PASS: "admin"
+  LS_HOST: ${{ secrets.LS_HOST }}
+  LS_PORT: ${{ secrets.LS_PORT }}
+  LS_USER: ${{ secrets.LS_USER }}
+  LS_PASS: ${{ secrets.LS_PASS }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
