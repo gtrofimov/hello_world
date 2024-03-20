@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SOAtestProject xmlVersion="5" productVersion="10.6.2" displayVersion="2023.1.0">
+<SOAtestProject xmlVersion="5" productVersion="10.6.3" displayVersion="2023.2.2">
  <TestSuite className="webtool.test.TestSuite" version="49.15.2">
   <DebugAssets className="webtool.test.debug.DebugAssets" version="1">
   </DebugAssets>
@@ -88,7 +88,7 @@
   <maxProfileMappingID>1</maxProfileMappingID>
   <PropertyOwnerImpl className="com.parasoft.property.PropertyOwnerImpl" version="1.1">
   </PropertyOwnerImpl>
-  <nextIdentifier>8</nextIdentifier>
+  <nextIdentifier>9</nextIdentifier>
   <testsSize>1</testsSize>
   <ClientTesterTest className="webtool.soap.client.ClientTesterTest" version="1.1.4.15.2">
    <DebugAssets className="webtool.test.debug.DebugAssets" version="1">
@@ -100,7 +100,7 @@
    <testID>2</testID>
    <enabled>true</enabled>
    <name>JSON Message Responder</name>
-   <ClientTester className="webtool.soap.client.ClientTester" version="v.2.39.17.14">
+   <ClientTester className="webtool.soap.client.ClientTester" version="v.2.41.17.14">
     <iconName>TestClient</iconName>
     <name>JSON Message Responder</name>
     <SonicMQJNDIProperties className="webtool.messaging.SonicMQJNDIProperties" version="2.21.1">
@@ -1318,13 +1318,13 @@
              <hash>8</hash>
              <name>type</name>
              <fixed>string</fixed>
-             <StringType className="webtool.soap.StringType" version="2">
-              <hash>4</hash>
+             <StringType className="webtool.soap.StringType" version="2.5.3">
+              <hash>9</hash>
              </StringType>
             </AttributeType>
             <content>true</content>
-            <StringType className="webtool.soap.StringType" version="2.5.3">
-             <hash>9</hash>
+            <StringType className="webtool.soap.StringType" version="2">
+             <hash>4</hash>
             </StringType>
             <namespace>urn:parasoft:json</namespace>
             <name>String</name>
@@ -1360,7 +1360,7 @@
              </AttributeValue>
              <contentValue>true</contentValue>
              <StringValue className="webtool.soap.StringValue" version="1.9.1.13">
-              <value>HelloGrigori!</value>
+              <value>HelloGrigori!!!!</value>
              </StringValue>
             </ComplexValue>
            </ElementValue>
