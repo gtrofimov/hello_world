@@ -19,26 +19,26 @@ steps:
     ls -R ${PWD}
 
     # Deloy Docker Virt Server
-    echo -e "\nDeploying Parasoft SOAVirt Server.\n"
-    docker run -d \
-    -p 9080:9080 \
-    -e ACCEPT_EULA=true \
-    --name soavirt-server parasoft/soavirt-server
+    # echo -e "\nDeploying Parasoft SOAVirt Server.\n"
+    # docker run -d \
+    # -p 9080:9080 \
+    # -e ACCEPT_EULA=true \
+    # --name soavirt-server parasoft/soavirt-server
     
     # Wait for Server to stand up
-    sleep 15s
+    # sleep 15s
     
     # Apply License
-    echo -e "\nApplying License.\n"
-    curl -X PUT "http://localhost:9080/soavirt/api/v6/preferences/config" \
-    -u admin:admin \
-    -H "accept: application/log" \
-    -H "Content-Type: application/log" \
-    -d "{\"license\":{\"licenseServer\":{\"host\":\"$(license.server.host)\",\"port\":$(license.server.port),\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"admin\",\"password\":\"$(license.server.password)\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
+    # echo -e "\nApplying License.\n"
+    # curl -X PUT "$(soavirt.url)/soavirt/api/v6/preferences/config" \
+    # -u admin:admin \
+    # -H "accept: application/log" \
+    # -H "Content-Type: application/log" \
+    # -d "{\"license\":{\"licenseServer\":{\"host\":\"$(license.server.host)\",\"port\":$(license.server.port),\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"admin\",\"password\":\"$(license.server.password)\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
 
     # Healthcheck Parasoft SOAVirt Server
     echo -e "\nPing SOAVirt.\n"
-    curl -u admin:admin http://localhost:9080/soavirt/api/v6/status -o tmp/server-hc.log
+    curl -u admin:admin $(soavirt.url)/soavirt/api/v6/status -o tmp/server-hc.log
     ls -R
     cat tmp/server-hc.log
   displayName: 'Deploy SOAVirt Server'
@@ -52,11 +52,11 @@ steps:
     do
       echo ${file}
       curl -iv --raw \
-      -u admin:admin \
+      -u demo:$(license.server.password) \
       -H "accept: application/json" \
       -H "Content-Type: multipart/form-data" \
       -F "file=@${file}" \
-      "http://localhost:9080/soavirt/api/v6/files/upload?id=%2FVirtualAssets%2F${file}&deploy=false&replace=true" \
+      "$(soavirt.url)/soavirt/api/v6/files/upload?id=%2FVirtualAssets%2F${file}&deploy=false&replace=true" \
       -o upload.log
 
       echo -e "\nDebug.\n"
@@ -70,7 +70,7 @@ steps:
     
     # Test PVA
     echo -e "\nTesting Virtual Assets.\n"
-    curl -iv --raw http://localhost:9080/HelloWorld -o test.log
+    curl -iv --raw $(soavirt.url)/HelloWorld -o test.log
     cat test.log
     echo -e "\nDone."
   displayName: 'Test Virtual Assets'
