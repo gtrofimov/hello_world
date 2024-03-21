@@ -1360,7 +1360,7 @@
              </AttributeValue>
              <contentValue>true</contentValue>
              <StringValue className="webtool.soap.StringValue" version="1.9.1.13">
-              <value>HelloGrigori!</value>
+              <value>HelloGrigori!!!!</value>
              </StringValue>
             </ComplexValue>
            </ElementValue>
