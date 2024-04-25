@@ -19,22 +19,22 @@ steps:
     ls -R ${PWD}
 
     # Deloy Docker Virt Server
-    # echo -e "\nDeploying Parasoft SOAVirt Server.\n"
-    # docker run -d \
-    # -p 9080:9080 \
-    # -e ACCEPT_EULA=true \
-    # --name soavirt-server parasoft/soavirt-server
+    echo -e "\nDeploying Parasoft SOAVirt Server.\n"
+    docker run -d \
+    -p 9080:9080 \
+    -e ACCEPT_EULA=true \
+    --name soavirt-server parasoft/soavirt-server
     
     # Wait for Server to stand up
-    # sleep 15s
+    sleep 15s
     
     # Apply License
     # echo -e "\nApplying License.\n"
-    # curl -X PUT "$(soavirt.url)/soavirt/api/v6/preferences/config" \
-    # -u admin:admin \
-    # -H "accept: application/log" \
-    # -H "Content-Type: application/log" \
-    # -d "{\"license\":{\"licenseServer\":{\"host\":\"$(license.server.host)\",\"port\":$(license.server.port),\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"admin\",\"password\":\"$(license.server.password)\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
+    curl -X PUT "$(soavirt.url)/soavirt/api/v6/preferences/config" \
+    -u admin:admin \
+    -H "accept: application/log" \
+    -H "Content-Type: application/log" \
+    -d "{\"license\":{\"licenseServer\":{\"host\":\"$(license.server.host)\",\"port\":$(license.server.port),\"useSpecifiedServer\":true,\"connectionType\":\"http\",\"authEnabled\":true,\"username\":\"admin\",\"password\":\"$(license.server.password)\"},\"virtualize\":{\"enabled\":true,\"useNetwork\":true,\"network\":{\"edition\":\"performance_server_edition\"}}}}"
 
     # Healthcheck Parasoft SOAVirt Server
     echo -e "\nPing SOAVirt.\n"
