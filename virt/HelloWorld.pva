@@ -11,7 +11,7 @@ suite:
   lastModifiedBy: gtrofimov
   profileMappingID: 0
   maxProfileMappingID: 1
-  nextIdentifier: 7
+  nextIdentifier: 8
   tests:
   - $type: ClientTesterTest
     testID: 2
@@ -765,7 +765,7 @@ suite:
                         contentValueObj:
                           $type: StringValue
                           replacedColumn: ""
-                          value: Hello Grigori!!
+                          value: Hello Grigori!!!!!
           elementTypeName: root
         jsonBuilder:
           hasValue: true
