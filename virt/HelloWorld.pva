@@ -1,5 +1,5 @@
 ---
-parasoftVersion: 2024.2.0
+parasoftVersion: 2024.2.1
 productVersion: 10.7.1
 schemaVersion: 1
 suite:
@@ -11,7 +11,7 @@ suite:
   lastModifiedBy: gtrofimov
   profileMappingID: 0
   maxProfileMappingID: 1
-  nextIdentifier: 8
+  nextIdentifier: 9
   tests:
   - $type: ClientTesterTest
     testID: 2
@@ -765,7 +765,7 @@ suite:
                         contentValueObj:
                           $type: StringValue
                           replacedColumn: ""
-                          value: Hello Grigori!!!!!
+                          value: Hello Grigori!!
           elementTypeName: root
         jsonBuilder:
           hasValue: true
